@@ -1,4 +1,6 @@
 function addToCart(idProduct) {
+
+    window.lx
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", "addToCart?productId=" + idProduct, true);
     xmlHttp.onreadystatechange = function () {
@@ -160,6 +162,7 @@ function showProduct(xmlDoc) {
         aProduct.className = "col-md-3 shop_box"
         aProduct.appendChild(aTag);
         aProduct.appendChild(divTag);
+        aProduct.style.marginTop = "3%";    
         document.getElementById("shop").appendChild(aProduct);
     }
 }
@@ -393,6 +396,35 @@ function updateCartDown(idProduct){
             viewCheckout();
             swal("Good job!", "Cart updated!", "success");
         }
+    }
+    xmlHttp.send();
+}
+
+function validateLogin() {
+    var xmlHttp = new XMLHttpRequest();
+    var txtUsername = document.getElementById("username");
+    var txtPassword = document.getElementById("password");
+    if (txtUsername.value === "") {
+        swal("Login Failed!", "Username can't be blank!", "error");     
+        return false;   
+    }
+
+    if (txtPassword.value === "") {
+        swal("Login Failed!", "Password can't be blank!", "error");     
+        return false;   
+
+    }
+    var xmlDoc;
+    xmlHttp.open("POST", "login?txtUsername=" + txtUsername.value + "&txtPassword="  +  txtPassword.value, true);
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            xmlDoc = xmlHttp.responseText;
+            alert(xmlHttp.responseText);
+        }
+    }
+    if (xmlDoc != "") {
+        swal("Login Failed!", xmlDoc, "error");
+        return false;
     }
     xmlHttp.send();
 }

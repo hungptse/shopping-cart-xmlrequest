@@ -23,7 +23,7 @@ public class LoginController extends HttpServlet {
 
     private final static String ADMIN = "admin.html";
     private final static String USER = "shop.jsp";
-    private static final String ERROR = "page-404.jsp";
+    private static final String ERROR = "login.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -39,12 +39,14 @@ public class LoginController extends HttpServlet {
         String url = ERROR;
         HttpSession session = request.getSession();
         try {
+            PrintWriter pw = response.getWriter();
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
             UserDAO dao = new UserDAO();
             String role = dao.checkLogin(username, password);
             if (role.equals("failed")) {
                 request.setAttribute("ERROR", "Invalid username or password");
+                pw.append("Invalid username or password");
             } else {
                 if (role.equals("admin")) {
                     url = ADMIN;
@@ -58,12 +60,13 @@ public class LoginController extends HttpServlet {
                     }
                 } else {
                     request.setAttribute("ERROR", "Your role not existed");
+                    pw.append("Your role not existed");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+//            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

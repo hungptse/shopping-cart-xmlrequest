@@ -88,15 +88,18 @@ public class ProductDAO implements Serializable {
     
     
     
-    public ArrayList<ProductDTO> getProductTop() throws SQLException, ClassNotFoundException
+    public ArrayList<ProductDTO> getProductPagnation(int page) throws SQLException, ClassNotFoundException
     {
         ArrayList<ProductDTO> result = null;
         ProductDTO dto;
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT id, name, description, price, quantity, image FROM tblProduct";
+                String sql = "SELECT id, name, description, price, quantity, image  FROM tblProduct WHERE id BETWEEN ? AND ?";
                 preStm = conn.prepareStatement(sql);
+                int quantity = page *4;
+                preStm.setInt(1, 1);
+                preStm.setInt(2, quantity);
                 rs = preStm.executeQuery();
                 result = new ArrayList<>();
                 while (rs.next()) {

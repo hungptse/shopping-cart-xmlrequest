@@ -94,9 +94,11 @@
         <div class="shop_top">
             <div class="container">
                 <div class="row shop_box-top" id="shop">
-                    <h1 style="margin-bottom: 5%">Shopping Cart - HungPT</h1>
+                    <h1 style="margin-bottom: 2%">Shopping Cart - HungPT</h1>         
                 </div>
+                <div class="login_button text-center col-lg-4 col-lg-offset-4"><a href="#">Load more</a></div>
             </div>
+            
         </div>
     </div>
 </body>

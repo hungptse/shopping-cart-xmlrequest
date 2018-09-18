@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ViewProductList extends HttpServlet {
 
+   
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
@@ -54,7 +56,6 @@ public class ViewProductList extends HttpServlet {
                 pw.append("</Product>");
             }
             pw.append("</Products>");
-
         } catch (Exception e) {
             e.printStackTrace();
         }

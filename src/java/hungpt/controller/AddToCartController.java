@@ -46,12 +46,12 @@ public class AddToCartController extends HttpServlet {
             dto.setQuantity(1);
             cart.addToCart(dto);
             session.setAttribute("shoppingCart", cart);
-            System.out.println("BEGIN CART");
-            System.out.println(cart.getUsername());
-            for (ProductDTO a : cart.getCart().values()) {
-                System.out.println(a);
-            }
-            System.out.println("END CART");
+//            System.out.println("BEGIN CART");
+//            System.out.println(cart.getUsername());
+//            for (ProductDTO a : cart.getCart().values()) {
+//                System.out.println(a);
+//            }
+//            System.out.println("END CART");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

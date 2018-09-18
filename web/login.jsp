@@ -1,137 +1,167 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
-        <meta name="author" content="Coderthemes">
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Login Page</title>
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function() {
+            $(".dropdown img.flag").addClass("flagvisibility");
 
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
-        <!-- App title -->
-        <title>Zircos - Responsive Admin Dashboard Template</title>
+            $(".dropdown dt a").click(function() {
+                $(".dropdown dd ul").toggle();
+            });
+                        
+            $(".dropdown dd ul li a").click(function() {
+                var text = $(this).html();
+                $(".dropdown dt a span").html(text);
+                $(".dropdown dd ul").hide();
+                $("#result").html("Selected value is: " + getSelectedValue("sample"));
+            });
+                        
+            function getSelectedValue(id) {
+                return $("#" + id).find("dt a span.value").html();
+            }
 
-        <!-- App css -->
-        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/core.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/components.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/pages.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/menu.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/responsive.css" rel="stylesheet" type="text/css" />
-
-        <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-
-        <script src="assets/js/modernizr.min.js"></script>
-
-    </head>
-
-
-    <body class="bg-transparent">
-
-        <!-- HOME -->
-        <section>
-            <div class="container-alt">
-                <div class="row">
-                    <div class="col-sm-12">
-
-                        <div class="wrapper-page">
-
-                            <div class="m-t-40 account-pages">
-                                <div class="text-center account-logo-box">
-                                    <h2 class="text-uppercase">
-                                        <a href="index.jsp.html" class="text-success">
-                                            <span><img src="assets/images/logo.png" alt="" height="36"></span>
-                                        </a>
-                                    </h2>
-                                    <!--<h4 class="text-uppercase font-bold m-b-0">Sign In</h4>-->
-                                </div>
-                                <div class="account-content">
-                                    <form class="form-horizontal" action="login" method="POST">
-
-                                        <div class="form-group ">
-                                            <div class="col-xs-12">
-                                                <input class="form-control" type="text" required="" placeholder="Username" name="txtUsername" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="col-xs-12">
-                                                <input class="form-control" type="password" required="" placeholder="Password" name="txtPassword" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group ">
-                                            <div class="col-xs-12">
-                                                <div class="checkbox checkbox-success">
-                                                    <input id="checkbox-signup" type="checkbox" checked>
-                                                    <label for="checkbox-signup">
-                                                        Remember me
-                                                    </label>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group text-center m-t-30">
-                                            <div class="col-sm-12">
-                                                <a href="page-recoverpw.html" class="text-muted"><i class="fa fa-lock m-r-5"></i> Forgot your password?</a>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group account-btn text-center m-t-10">
-                                            <div class="col-xs-12">
-                                                <button class="btn w-md btn-bordered btn-danger waves-effect waves-light" type="submit">Log In</button>
-                                            </div>
-                                        </div>
-
-                                    </form>
-
-                                    <div class="clearfix"></div>
-
-                                </div>
-                            </div>
-                            <!-- end card-box-->
+            $(document).bind('click', function(e) {
+                var $clicked = $(e.target);
+                if (! $clicked.parents().hasClass("dropdown"))
+                    $(".dropdown dd ul").hide();
+            });
 
 
-                            <div class="row m-t-50">
-                                <div class="col-sm-12 text-center">
-                                    <p class="text-muted">Don't have an account? <a href="page-register.html" class="text-primary m-l-5"><b>Sign Up</b></a></p>
-                                </div>
-                            </div>
+            $("#flagSwitcher").click(function() {
+                $(".dropdown img.flag").toggleClass("flagvisibility");
+            });
+        });
+     </script>
+ </head>
+<body>
+    <%@include file="header.jsp" %>
 
-                        </div>
-                        <!-- end wrapper -->
-
-                    </div>
-                </div>
-            </div>
-          </section>
-          <!-- END HOME -->
-
-        <script>
-            var resizefunc = [];
-        </script>
-
-        <!-- jQuery  -->
-        <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/detect.js"></script>
-        <script src="assets/js/fastclick.js"></script>
-        <script src="assets/js/jquery.blockUI.js"></script>
-        <script src="assets/js/waves.js"></script>
-        <script src="assets/js/jquery.slimscroll.js"></script>
-        <script src="assets/js/jquery.scrollTo.min.js"></script>
-
-        <!-- App js -->
-        <script src="assets/js/jquery.core.js"></script>
-        <script src="assets/js/jquery.app.js"></script>
-
-    </body>
+     <div class="main">
+      <div class="shop_top">
+		<div class="container">
+			<div class="col-md-6">
+				 <div class="login-page">
+					<h4 class="title">New Customers</h4>
+					<p>Hello, My name is Hung. Please register for login to website</p>
+					<div class="button1">
+					   <a href="register.html"><input type="submit" name="Submit" value="Create an Account"></a>
+					 </div>
+					 <div class="clear"></div>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				 <div class="login-title">
+	           		<h4 class="title">Login to Website</h4>
+					<div id="loginbox" class="loginbox">
+						<form action="" method="POST" name="login" id="login-form" onsubmit="return validateLogin();">
+						  <fieldset class="input">
+						    <p id="login-form-username">
+						      <label for="modlgn_username">Username</label>
+						      <input id="username" type="text" name="txtUsername" class="inputbox" size="18" autocomplete="off">
+						    </p>
+						    <p id="login-form-password">
+								<label for="modlgn_passwd">Password</label>
+								<input id="password" type="password" name="txtPassword" class="inputbox" size="18" autocomplete="off">
+						    </p>
+						    <div class="remember">
+								<p id="login-form-remember">
+									<label for="modlgn_remember"><a href="#">Forget Your Password ? </a></label>
+								</p>
+							    <input type="submit" name="Submit" class="button" value="Login"><div class="clear"></div>
+							</div>
+						</fieldset>
+						 </form>
+					</div>
+			      </div>
+				 <div class="clear"></div>
+			  </div>
+			</div>
+		  </div>
+	  </div>
+	  <div class="footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3">
+						<ul class="footer_box">
+							<h4>Products</h4>
+							<li><a href="#">Mens</a></li>
+							<li><a href="#">Womens</a></li>
+							<li><a href="#">Youth</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul class="footer_box">
+							<h4>About</h4>
+							<li><a href="#">Careers and internships</a></li>
+							<li><a href="#">Sponserships</a></li>
+							<li><a href="#">team</a></li>
+							<li><a href="#">Catalog Request/Download</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul class="footer_box">
+							<h4>Customer Support</h4>
+							<li><a href="#">Contact Us</a></li>
+							<li><a href="#">Shipping and Order Tracking</a></li>
+							<li><a href="#">Easy Returns</a></li>
+							<li><a href="#">Warranty</a></li>
+							<li><a href="#">Replacement Binding Parts</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul class="footer_box">
+							<h4>Newsletter</h4>
+							<div class="footer_search">
+				    		   <form>
+				    			<input type="text" value="Enter your email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter your email';}">
+				    			<input type="submit" value="Go">
+				    		   </form>
+					        </div>
+							<ul class="social">	
+							  <li class="facebook"><a href="#"><span> </span></a></li>
+							  <li class="twitter"><a href="#"><span> </span></a></li>
+							  <li class="instagram"><a href="#"><span> </span></a></li>	
+							  <li class="pinterest"><a href="#"><span> </span></a></li>	
+							  <li class="youtube"><a href="#"><span> </span></a></li>										  				
+						    </ul>
+		   				</ul>
+					</div>
+				</div>
+				<div class="row footer_bottom">
+				    <div class="copy">
+			           <p>© 2014 Template by <a href="http://w3layouts.com" target="_blank">w3layouts</a></p>
+		            </div>
+					  <dl id="sample" class="dropdown">
+				        <dt><a href="#"><span>Change Region</span></a></dt>
+				        <dd>
+				            <ul>
+				                <li><a href="#">Australia<img class="flag" src="images/as.png" alt="" /><span class="value">AS</span></a></li>
+				                <li><a href="#">Sri Lanka<img class="flag" src="images/srl.png" alt="" /><span class="value">SL</span></a></li>
+				                <li><a href="#">Newziland<img class="flag" src="images/nz.png" alt="" /><span class="value">NZ</span></a></li>
+				                <li><a href="#">Pakistan<img class="flag" src="images/pk.png" alt="" /><span class="value">Pk</span></a></li>
+				                <li><a href="#">United Kingdom<img class="flag" src="images/uk.png" alt="" /><span class="value">UK</span></a></li>
+				                <li><a href="#">United States<img class="flag" src="images/us.png" alt="" /><span class="value">US</span></a></li>
+				            </ul>
+				         </dd>
+	   				  </dl>
+   				</div>
+			</div>
+		</div>
+</body>	
+<script src="js/process.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </html>
