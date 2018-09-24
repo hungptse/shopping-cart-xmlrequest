@@ -1,2 +1,7 @@
 build/web/images/
 web/images
+nbproject
+dist
+build
+test
+build.xml
