@@ -5,7 +5,7 @@
  */
 package hungpt.controller;
 
-import hungpt.dtos.CartDTO;
+import hungpt.dtos.CartObj;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -33,7 +33,7 @@ public class ClearCartController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             HttpSession session = request.getSession();
-            CartDTO cart = (CartDTO) session.getAttribute("shoppingCart");
+            CartObj cart = (CartObj) session.getAttribute("shoppingCart");
             PrintWriter pw = response.getWriter();
             if (cart == null) {
                 pw.append("Nothing");

@@ -6,10 +6,9 @@
 package hungpt.controller;
 
 import hungpt.daos.ProductDAO;
-import hungpt.dtos.CartDTO;
+import hungpt.dtos.CartObj;
 import hungpt.dtos.ProductDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,9 +35,9 @@ public class AddToCartController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             String productId = request.getParameter("productId");
-            CartDTO cart = (CartDTO) session.getAttribute("shoppingCart");
+            CartObj cart = (CartObj) session.getAttribute("shoppingCart");
             if (cart == null) {
-                cart = new CartDTO();
+                cart = new CartObj();
             }
             
             ProductDAO dao = new ProductDAO();

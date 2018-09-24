@@ -6,7 +6,7 @@
 package hungpt.controller;
 
 import hungpt.daos.UserDAO;
-import hungpt.dtos.CartDTO;
+import hungpt.dtos.CartObj;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -38,14 +38,14 @@ public class LoginController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         HttpSession session = request.getSession();
+        PrintWriter pw = response.getWriter();
+
         try {
-            PrintWriter pw = response.getWriter();
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
             UserDAO dao = new UserDAO();
             String role = dao.checkLogin(username, password);
             if (role.equals("failed")) {
-                request.setAttribute("ERROR", "Invalid username or password");
                 pw.append("Invalid username or password");
             } else {
                 if (role.equals("admin")) {
@@ -54,19 +54,18 @@ public class LoginController extends HttpServlet {
                 } else if (role.equals("user")) {
                     url = USER;
                     session.setAttribute("USERNAME", username);
-                    CartDTO cart = (CartDTO) session.getAttribute("shoppingCart");
+                    CartObj cart = (CartObj) session.getAttribute("shoppingCart");
                     if (cart != null) {
                         cart.setUsername(username);
                     }
                 } else {
-                    request.setAttribute("ERROR", "Your role not existed");
                     pw.append("Your role not existed");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-//            request.getRequestDispatcher(url).forward(request, response);
+//           request.
         }
     }
 

@@ -6,7 +6,7 @@
 package hungpt.controller;
 
 import hungpt.daos.ProductDAO;
-import hungpt.dtos.CartDTO;
+import hungpt.dtos.CartObj;
 import hungpt.dtos.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +36,7 @@ public class RemoveFromCartController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             String productId = request.getParameter("productId");
-            CartDTO cart = (CartDTO) session.getAttribute("shoppingCart");
+            CartObj cart = (CartObj) session.getAttribute("shoppingCart");
             cart.remove(Integer.parseInt(productId));
             if (cart.getCart() != null) {
                 session.setAttribute("shoppingCart", cart);

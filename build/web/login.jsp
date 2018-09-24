@@ -67,7 +67,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				 <div class="login-title">
 	           		<h4 class="title">Login to Website</h4>
 					<div id="loginbox" class="loginbox">
-						<form action="" method="POST" name="login" id="login-form" onsubmit="return validateLogin();">
+						<div  name="login" id="login-form">
 						  <fieldset class="input">
 						    <p id="login-form-username">
 						      <label for="modlgn_username">Username</label>
@@ -81,10 +81,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								<p id="login-form-remember">
 									<label for="modlgn_remember"><a href="#">Forget Your Password ? </a></label>
 								</p>
-							    <input type="submit" name="Submit" class="button" value="Login"><div class="clear"></div>
+							    <input type="submit" class="button" value="Login" onclick="validateLogin();"><div class="clear"></div>
 							</div>
 						</fieldset>
-						 </form>
+						 </div>
 					</div>
 			      </div>
 				 <div class="clear"></div>

@@ -5,7 +5,7 @@
  */
 package hungpt.controller;
 
-import hungpt.dtos.CartDTO;
+import hungpt.dtos.CartObj;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -35,7 +35,7 @@ public class UpdateCartController extends HttpServlet {
             HttpSession session = request.getSession();
             int productId = Integer.parseInt(request.getParameter("idProduct"));
             int newQuantity = Integer.parseInt(request.getParameter("newQuantity"));
-            CartDTO cart = (CartDTO) session.getAttribute("shoppingCart");
+            CartObj cart = (CartObj) session.getAttribute("shoppingCart");
             if (cart != null) {
                 cart.update(productId, newQuantity);
             }
