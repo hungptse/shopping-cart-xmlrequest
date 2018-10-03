@@ -1,5 +1,3 @@
-
-
 function addToCart(idProduct) {
 
 
@@ -12,24 +10,55 @@ function addToCart(idProduct) {
     //     }
     // };
     // xmlHttp.send();
-    // alert("AAAA");  
-    var product = window.localStorage.getItem(idProduct);
-    var quantity;
-    if (product != null) {
-        var tmp = product.split(",");
-        tmp[1] = parseInt(tmp[1]) + 1;
-        quantity = tmp[1];
+    var Product;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", "product?id=" + idProduct, true);
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.status === 200 && xmlHttp.readyState === 4) {
+            var xmlDoc = xmlHttp.responseXML;
+            Product = xmlDoc.childNodes[0];
+        }
+    };
+    xmlHttp.send();
+    var textProduct = window.localStorage.getItem(idProduct);
+    var ProductInCart = StringToXML(textProduct);
+    if (textProduct != null) {
+        var tmp = parseInt(ProductInCart.getElementsByTagName("quantity")[0].textContent);
+        tmp = parseInt(tmp) + 1;
+        ProductInCart.getElementsByTagName("quantity")[0].nodeValue = tmp;
     } else {
         var count = window.localStorage.getItem("count");
         count = parseInt(count) + 1;
         window.localStorage.setItem("count", count);
-        quantity = 1;
+        ProductInCart.getElementsByTagName("quantity")[0].nodeValue = 1;
     }
-    window.localStorage.setItem(idProduct, idProduct + "," + quantity);
-    swal("Good job!", "Added to cart!", "success");
-    viewCart();
+    window.localStorage.setItem(idProduct, XMLToString(ProductInCart));
 
 }
+
+function XMLToString(oXML) {
+    //code for IE
+    if (window.ActiveXObject) {
+        var oString = oXML.xml;
+        return oString;
+    }
+    // code for Chrome, Safari, Firefox, Opera, etc.
+    else {
+        return (new XMLSerializer()).serializeToString(oXML);
+    }
+}
+
+function StringToXML(oString) {
+    //code for IE
+    if (window.ActiveXObject) { 
+    var oXML = new ActiveXObject("Microsoft.XMLDOM"); oXML.loadXML(oString);
+    return oXML;
+    }
+    // code for Chrome, Safari, Firefox, Opera, etc. 
+    else {
+    return (new DOMParser()).parseFromString(oString, "text/xml");
+    }
+   }
 
 function removeFromCart(idProduct) {
     swal({
@@ -78,8 +107,8 @@ function viewCart() {
         if (key != null && key.match("^[0-9][,][0-9]$")) {
             var id = value.split(",")[0];
             var quantity = value.split(",")[1];
-            
-        }        
+
+        }
     }
 
 }
@@ -128,14 +157,14 @@ function createProductView(Product) {
 
 function loadProduct() {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "viewProduct", true)
+    xmlHttp.open("GET", "product", true)
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             // alert(xmlHttp.responseXML);
             // xmlDoc = new XMLSerializer().serializeToString(xmlHttp.responseXML.documentElement);
             showProduct(xmlHttp.responseXML);
             // productXML = xmlHttp.responseXML;
-            alert(xmlHttp.responseText);
+            // alert(xmlHttp.responseText);
         }
     }
     xmlHttp.send();
@@ -402,7 +431,7 @@ function removeFromCartCheckout(idProduct) {
                         viewCheckout();
                         viewCart();
                     }
-                }
+                };
                 xmlHttp.send();
             } else {
                 swal("Product hasn't been remove!");
@@ -421,7 +450,7 @@ function updateCartUp(idProduct) {
             swal("Good job!", "Cart updated!", "success");
 
         }
-    }
+    };
     xmlHttp.send();
 }
 
@@ -435,7 +464,7 @@ function updateCartDown(idProduct) {
             viewCheckout();
             swal("Good job!", "Cart updated!", "success");
         }
-    }
+    };
     xmlHttp.send();
 }
 
@@ -453,14 +482,196 @@ function validateLogin() {
         return false;
 
     }
-    xmlHttp.open("POST", "login?txtUsername=" + txtUsername.value + "&txtPassword=" + txtPassword.value, true);
+}
+
+function loadProductInDB() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", "product", true);
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            if (xmlHttp.responseText != "") {
-                swal("Login Failed!", xmlHttp.responseText, "error");
-                return false;
-            }
+            // alert(xmlHttp.responseXML);
+            // xmlDoc = new XMLSerializer().serializeToString(xmlHttp.responseXML.documentElement);
+            showProductInDB(xmlHttp.responseXML);
+            // productXML = xmlHttp.responseXML;
+            // alert(xmlHttp.responseText);
+        }
+    };
+    xmlHttp.send();
+}
+var lastId = 0;
+
+function showProductInDB(xmlDoc) {
+    document.getElementById("dataProduct").innerHTML = "";
+    var Products = xmlDoc.childNodes[0];
+    for (var i = 0; i < Products.children.length; i++) {
+        lastId = i + 1;
+        var Product = Products.children[i];
+        var row = document.createElement("tr");
+        var no = document.createElement("th");
+        no.scope = "row";
+        no.innerHTML = i + 1;
+        var name = document.createElement("td");
+        name.innerHTML = Product.getElementsByTagName("name")[0].textContent.toString();
+        var price = document.createElement("td");
+        price.innerHTML = Product.getElementsByTagName("price")[0].textContent.toString();
+        var quantity = document.createElement("td");
+        quantity.innerHTML = Product.getElementsByTagName("quantity")[0].textContent.toString();
+        row.appendChild(no);
+        row.appendChild(name);
+        row.appendChild(price);
+        row.appendChild(quantity);
+        var edit = document.createElement("a");
+        edit.innerHTML = "<img src='images/edit.png'>";
+        edit.href = "javascript:showPopup(" + Product.getElementsByTagName("id")[0].textContent.toString() + ");";
+        var deleteProduct = document.createElement("a");
+        deleteProduct.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<img src='images/close_edit.png'>";
+        deleteProduct.href = "javascript:deleteProduct(" + Product.getElementsByTagName("id")[0].textContent.toString() + ");";
+        var action = document.createElement("td");
+        action.appendChild(edit);
+        action.appendChild(deleteProduct);
+        row.appendChild(action);
+        document.getElementById("dataProduct").appendChild(row);
+    }
+    document.getElementById("table").style.display = "";
+    document.getElementById("infoProduct").style.display = "none";
+
+}
+
+function showPopup(idProduct) {
+    document.getElementById("table").style.display = "none";
+    document.getElementById("infoProduct").style.display = "block";
+    document.getElementById("btnAdd").style.display = "none";
+    document.getElementById("divAdd").style.display = "none";
+    document.getElementById("divUpdate").style.display = "";
+
+    var id = document.getElementById("idProduct");
+    var name = document.getElementById("name");
+    var description = document.getElementById("description");
+    var price = document.getElementById("price");
+    var quantity = document.getElementById("quantity");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", "product?id=" + idProduct, true);
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.status === 200 && xmlHttp.readyState === 4) {
+            var xmlDoc = xmlHttp.responseXML;
+            var Product = xmlDoc.childNodes[0];
+            id.value = Product.getElementsByTagName("id")[0].textContent.toString();
+            name.value = Product.getElementsByTagName("name")[0].textContent.toString();
+            description.value = Product.getElementsByTagName("description")[0].textContent.toString();
+            price.value = Product.getElementsByTagName("price")[0].textContent.toString();
+            quantity.value = Product.getElementsByTagName("quantity")[0].textContent.toString();
         }
     }
     xmlHttp.send();
+}
+
+function cancelUpdate() {
+    //    location.reload();
+    document.getElementById("table").style.display = "";
+    document.getElementById("infoProduct").style.display = "none";
+    document.getElementById("btnAdd").style.display = "";
+}
+
+function updateProduct() {
+    var id = document.getElementById("idProduct");
+    var name = document.getElementById("name");
+    var description = document.getElementById("description");
+    var price = document.getElementById("price");
+    var quantity = document.getElementById("quantity");
+    var xmlHttp = new XMLHttpRequest();
+    // xmlHttp.open("PUT","http://localhost:8080/RestAPI/seminar/product/" + id.value, true);
+    xmlHttp.open("PUT", "product", true);
+
+    xmlHttp.setRequestHeader('Content-type', 'application/xml');
+    // xmlHttp.setRequestHeader
+    xmlDoc = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>";
+    xmlDoc += "<Product>";
+    xmlDoc += "<id>" + id.value + "</id>";
+    xmlDoc += "<name>" + name.value + "</name>";
+    xmlDoc += "<description>" + description.value + "</description>";
+    xmlDoc += "<price>" + price.value + "</price>";
+    xmlDoc += "<quantity>" + quantity.value + "</quantity>";
+    xmlDoc += "</Product>";
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            loadProductInDB();
+        } else {
+            console.log(xmlHttp);
+        }
+    }
+    xmlHttp.send(xmlDoc);
+}
+
+function addProduct() {
+    document.getElementById("table").style.display = "none";
+    document.getElementById("infoProduct").style.display = "block";
+    document.getElementById("btnAdd").style.display = "none";
+    document.getElementById("divUpdate").style.display = "none";
+    document.getElementById("divAdd").style.display = "";
+    var id = document.getElementById("idProduct");
+    var name = document.getElementById("name");
+    var description = document.getElementById("description");
+    var price = document.getElementById("price");
+    var quantity = document.getElementById("quantity");
+    id.value = lastId + 1;
+    name.value = "";
+    description.value = "";
+    price.value = "";
+    quantity.value = "";
+}
+
+function postProduct() {
+    var id = document.getElementById("idProduct");
+    var name = document.getElementById("name");
+    var description = document.getElementById("description");
+    var price = document.getElementById("price");
+    var quantity = document.getElementById("quantity");
+    var xmlHttp = new XMLHttpRequest();
+    // xmlHttp.open("PUT","http://localhost:8080/RestAPI/seminar/product/" + id.value, true);
+    xmlHttp.open("POST", "product", true);
+    xmlHttp.setRequestHeader('Content-type', 'application/xml');
+    xmlDoc = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>";
+    xmlDoc += "<Product>";
+    xmlDoc += "<id>" + id.value + "</id>";
+    xmlDoc += "<name>" + name.value + "</name>";
+    xmlDoc += "<description>" + description.value + "</description>";
+    xmlDoc += "<price>" + price.value + "</price>";
+    xmlDoc += "<quantity>" + quantity.value + "</quantity>";
+    xmlDoc += "</Product>";
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            loadProductInDB();
+            document.getElementById("btnAdd").style.display = "";
+        } else {
+            console.log(xmlHttp);
+        }
+    }
+    xmlHttp.send(xmlDoc);
+}
+
+function deleteProduct(id) {
+    swal({
+            title: "Are you sure?",
+            text: "Delete this Product!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("DELETE", "product?id=" + id, true);
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                        swal("Product have been deleted!", {
+                            icon: "success",
+                        });
+                        loadProductInDB();
+                    }
+                }
+                xmlHttp.send();
+            } else {
+                swal("Product haven't been deleted!!");
+            }
+        });
 }

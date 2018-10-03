@@ -24,6 +24,7 @@ public class ProductDAO implements Serializable {
     private PreparedStatement preStm;
     private ResultSet rs;
     private static ProductDAO dao;
+
     public void closeConnection() throws SQLException {
         if (rs != null) {
             rs.close();
@@ -35,16 +36,15 @@ public class ProductDAO implements Serializable {
             conn.close();
         }
     }
-    
-    public static ProductDAO getInstance()
-    {
+
+    public static ProductDAO getInstance() {
         if (dao == null) {
             dao = new ProductDAO();
         }
         return dao;
     }
-    public ArrayList<ProductDTO> getAllProduct() throws SQLException, ClassNotFoundException
-    {
+
+    public ArrayList<ProductDTO> getAllProduct() throws SQLException, ClassNotFoundException {
         ArrayList<ProductDTO> result = null;
         ProductDTO dto;
         try {
@@ -62,10 +62,30 @@ public class ProductDAO implements Serializable {
         } finally {
             closeConnection();
         }
-        
+
         return result;
     }
-    
+
+    public boolean updateProduct(ProductDTO dto) throws SQLException, ClassNotFoundException {
+        boolean result = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE tblProduct SET name = ? , description = ?, price = ?, quantity = ? WHERE id = ?";
+                preStm = conn.prepareStatement(sql);
+                preStm.setString(1, dto.getName());
+                preStm.setString(2, dto.getDescription());
+                preStm.setDouble(3, dto.getPrice());
+                preStm.setInt(4, dto.getQuantity());
+                preStm.setInt(5, dto.getId());
+                result = preStm.executeUpdate() > 0;
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
     public ProductDTO getProductById(int id) throws SQLException, ClassNotFoundException {
         ProductDTO dto = null;
         try {
@@ -76,7 +96,7 @@ public class ProductDAO implements Serializable {
                 preStm.setInt(1, id);
                 rs = preStm.executeQuery();
                 if (rs.next()) {
-                    dto = new ProductDTO(rs.getInt("id"), 0, rs.getString("name"), rs.getString("description"), rs.getString("image"), rs.getDouble("price"));
+                    dto = new ProductDTO(rs.getInt("id"), rs.getInt("quantity"), rs.getString("name"), rs.getString("description"), rs.getString("image"), rs.getDouble("price"));
                 }
             }
         } finally {
@@ -85,32 +105,66 @@ public class ProductDAO implements Serializable {
 
         return dto;
     }
+
+//    public ArrayList<ProductDTO> getProductPagnation(int page) throws SQLException, ClassNotFoundException
+//    {
+//        ArrayList<ProductDTO> result = null;
+//        ProductDTO dto;
+//        try {
+//            conn = DBUtils.getConnection();
+//            if (conn != null) {
+//                String sql = "SELECT id, name, description, price, quantity, image  FROM tblProduct WHERE id BETWEEN ? AND ?";
+//                preStm = conn.prepareStatement(sql);
+//                int quantity = page *4;
+//                preStm.setInt(1, 1);
+//                preStm.setInt(2, quantity);
+//                rs = preStm.executeQuery();
+//                result = new ArrayList<>();
+//                while (rs.next()) {
+//                    dto = new ProductDTO(rs.getInt("id"), rs.getInt("quantity"), rs.getString("name"), rs.getString("description"), rs.getString("image"), rs.getDouble("price"));
+//                    result.add(dto);
+//                }
+//            }
+//        } finally {
+//            closeConnection();
+//        }
+//        
+//        return result;
+//    }
     
     
-    
-    public ArrayList<ProductDTO> getProductPagnation(int page) throws SQLException, ClassNotFoundException
-    {
-        ArrayList<ProductDTO> result = null;
-        ProductDTO dto;
+    public boolean insertProduct(ProductDTO dto) throws SQLException, ClassNotFoundException {
+        boolean result = false;
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT id, name, description, price, quantity, image  FROM tblProduct WHERE id BETWEEN ? AND ?";
+                String sql = "INSERT INTO tblProduct(name,description,price,quantity) VALUES(?,?,?,?)";
                 preStm = conn.prepareStatement(sql);
-                int quantity = page *4;
-                preStm.setInt(1, 1);
-                preStm.setInt(2, quantity);
-                rs = preStm.executeQuery();
-                result = new ArrayList<>();
-                while (rs.next()) {
-                    dto = new ProductDTO(rs.getInt("id"), rs.getInt("quantity"), rs.getString("name"), rs.getString("description"), rs.getString("image"), rs.getDouble("price"));
-                    result.add(dto);
-                }
+                preStm.setString(1, dto.getName());
+                preStm.setString(2, dto.getDescription());
+                preStm.setDouble(3, dto.getPrice());
+                preStm.setInt(4, dto.getQuantity());
+                result = preStm.executeUpdate() > 0;
             }
         } finally {
             closeConnection();
         }
-        
+        return result;
+    }
+    
+      public boolean deleteProduct(int id) throws SQLException, ClassNotFoundException {
+        boolean result = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "DELETE FROM tblProduct WHERE id = ?";
+                preStm = conn.prepareStatement(sql);
+                preStm.setInt(1, id);
+                result = preStm.executeUpdate() > 0;
+            }
+        } finally {
+            closeConnection();
+        }
         return result;
     }
 }

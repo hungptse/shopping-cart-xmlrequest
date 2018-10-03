@@ -20,11 +20,11 @@
                         <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                         <ul class="nav" id="nav">
                             <li class="current"><a href="shop.jsp">Shop</a></li>
-                            <li><a href="#">Team</a></li>
+                            <li><a href="products.jsp">Product</a></li>
                             <li><a href="#">Events</a></li>
                             <li><a href="#">Experiance</a></li>
                             <li><a href="#">Company</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <%-- <li><a href="#">Contact</a></li> --%>
                             <div class="clear"></div>
                         </ul>
                         <!-- <script type="text/javascript" src="js/responsive-nav.js"></script> -->

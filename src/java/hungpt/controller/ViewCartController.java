@@ -33,10 +33,10 @@ public class ViewCartController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/xml;charset=UTF-8");
+        PrintWriter pw = response.getWriter();
         try {
             HttpSession session = request.getSession();
             CartObj cart = (CartObj) session.getAttribute("shoppingCart");
-            PrintWriter pw = response.getWriter();
             pw.append("<Cart>");
             if (cart != null) {
                 for (ProductDTO dto : cart.getCart().values()) {
@@ -53,6 +53,8 @@ public class ViewCartController extends HttpServlet {
             pw.append("</Cart>");
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            pw.close();
         }
     }
 

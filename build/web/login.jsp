@@ -81,7 +81,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								<p id="login-form-remember">
 									<label for="modlgn_remember"><a href="#">Forget Your Password ? </a></label>
 								</p>
-							    <input type="submit" class="button" value="Login" onclick="validateLogin();"><div class="clear"></div>
+							    <input type="submit" class="button" value="Login" onclick="return validateLogin();"><div class="clear"></div>
 							</div>
 						</fieldset>
 						 </div>

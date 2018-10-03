@@ -497,6 +497,18 @@ li.list_desc h4 a:hover{
 	background:#555;
 }
 
+#infoProduct{
+	/* background: red; */
+	position: absolute;
+	/* top: 400px; */
+	width: 60%;
+	z-index: 100;
+	border: #000 solid 2px;
+	padding: 1%;
+	box-sizing: border-box;
+	display: none;
+}
+
 #removeProduct{
 	float: right;
 }
@@ -1696,7 +1708,7 @@ input.inputbox, input.required, div.k2AccountPage input[type="text"] {
 .remember {
 	margin-top: 6%;
 }
-p#login-form-remember {
+p #login-form-remember {
 	float: left;
 }
 fieldset.input input[type="submit"] {
