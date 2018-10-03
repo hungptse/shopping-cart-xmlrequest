@@ -31,8 +31,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <%@include file="header.jsp" %>
     <div class="main">
         <div class="shop_top">
-            <c:set var="cart" value="${sessionScope.shoppingCart}" />
-            <input type="hidden" id="username" value="${cart.username}">
             <div class="container" id="checkout">
                     <!-- <h4 class="title">CUSTOMER: ${cart.username} </h4> -->
                     <!-- <h4 class="title">CUSTOMER: ${cart.username} </h4>
