@@ -39,7 +39,6 @@ public class LoginController extends HttpServlet {
         String url = ERROR;
         HttpSession session = request.getSession();
         PrintWriter pw = response.getWriter();
-
         try {
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
@@ -65,7 +64,7 @@ public class LoginController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-//           request.
+           request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

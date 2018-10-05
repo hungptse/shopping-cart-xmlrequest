@@ -8,6 +8,7 @@ package hungpt.controller;
 import hungpt.daos.ProductDAO;
 import hungpt.dtos.ProductDTO;
 import hungpt.sax.ProcessXML;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 /**
  *
@@ -53,8 +55,53 @@ public class ProductController extends HttpServlet {
         PrintWriter pw = response.getWriter();
         try {
             String id = request.getParameter("id");
+            String search = request.getParameter("search");
+            String from = request.getParameter("from");
+            String to = request.getParameter("to");
+            String count = request.getParameter("count");
             ProductDAO dao = ProductDAO.getInstance();
-            if (id == null) {
+            if (id != null) {
+                ProductDTO dto = dao.getProductById(Integer.parseInt(id));
+                pw.append("<Product>");
+                pw.append("<id>").append(dto.getId() + "").append("</id>");
+                pw.append("<name>").append(dto.getName()).append("</name>");
+                pw.append("<description>").append(dto.getDescription()).append("</description>");
+                pw.append("<price>").append(dto.getPrice() + "").append("</price>");
+                pw.append("<quantity>").append(dto.getQuantity() + "").append("</quantity>");
+                pw.append("<image>").append(dto.getImage()).append("</image>");
+                pw.append("</Product>");
+            } else if (search != null) {
+                List<ProductDTO> listProduct = dao.findLikeByName(search);
+                pw.append("<Products>");
+                for (ProductDTO dto : listProduct) {
+                    pw.append("<Product>");
+                    pw.append("<id>").append(dto.getId() + "").append("</id>");
+                    pw.append("<name>").append(dto.getName()).append("</name>");
+                    pw.append("<description>").append(dto.getDescription()).append("</description>");
+                    pw.append("<price>").append(dto.getPrice() + "").append("</price>");
+                    pw.append("<quantity>").append(dto.getQuantity() + "").append("</quantity>");
+                    pw.append("<image>").append(dto.getImage()).append("</image>");
+                    pw.append("</Product>");
+                }
+                pw.append("</Products>");
+            } else if (from != null && to != null) {
+                List<ProductDTO> listProduct = dao.getProductFromTo(0, Integer.parseInt(to));
+                pw.append("<Products>");
+                for (ProductDTO dto : listProduct) {
+                    pw.append("<Product>");
+                    pw.append("<id>").append(dto.getId() + "").append("</id>");
+                    pw.append("<name>").append(dto.getName()).append("</name>");
+                    pw.append("<description>").append(dto.getDescription()).append("</description>");
+                    pw.append("<price>").append(dto.getPrice() + "").append("</price>");
+                    pw.append("<quantity>").append(dto.getQuantity() + "").append("</quantity>");
+                    pw.append("<image>").append(dto.getImage()).append("</image>");
+                    pw.append("</Product>");
+                }
+                pw.append("</Products>");
+            } else if (count != null) {
+                int countInt = dao.countProduct();
+                pw.append(countInt + "");
+            } else {
                 List<ProductDTO> listProduct = dao.getAllProduct();
                 pw.append("<Products>");
                 for (ProductDTO dto : listProduct) {
@@ -68,16 +115,6 @@ public class ProductController extends HttpServlet {
                     pw.append("</Product>");
                 }
                 pw.append("</Products>");
-            } else {
-                ProductDTO dto = dao.getProductById(Integer.parseInt(id));
-                pw.append("<Product>");
-                pw.append("<id>").append(dto.getId() + "").append("</id>");
-                pw.append("<name>").append(dto.getName()).append("</name>");
-                pw.append("<description>").append(dto.getDescription()).append("</description>");
-                pw.append("<price>").append(dto.getPrice() + "").append("</price>");
-                pw.append("<quantity>").append(dto.getQuantity() + "").append("</quantity>");
-                pw.append("<image>").append(dto.getImage()).append("</image>");
-                pw.append("</Product>");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,6 +141,9 @@ public class ProductController extends HttpServlet {
             parser.parse(request.getInputStream(), xml);
             List<ProductDTO> result = xml.getListResult();
             //test nao
+//            String filePath = request.getSession().getServletContext().getRealPath("/");
+//            File fileToCreate = new File(filePath);
+//            FileUtils.
             ProductDAO dao = ProductDAO.getInstance();
             boolean check = dao.insertProduct(result.get(0));
             if (check) {
@@ -113,7 +153,7 @@ public class ProductController extends HttpServlet {
             e.printStackTrace();
         }
     }
-
+    
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -132,7 +172,7 @@ public class ProductController extends HttpServlet {
             e.printStackTrace();
         }
     }
-
+    
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");

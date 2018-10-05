@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -106,31 +107,36 @@ public class ProductDAO implements Serializable {
         return dto;
     }
 
-//    public ArrayList<ProductDTO> getProductPagnation(int page) throws SQLException, ClassNotFoundException
-//    {
-//        ArrayList<ProductDTO> result = null;
-//        ProductDTO dto;
-//        try {
-//            conn = DBUtils.getConnection();
-//            if (conn != null) {
-//                String sql = "SELECT id, name, description, price, quantity, image  FROM tblProduct WHERE id BETWEEN ? AND ?";
-//                preStm = conn.prepareStatement(sql);
-//                int quantity = page *4;
-//                preStm.setInt(1, 1);
-//                preStm.setInt(2, quantity);
-//                rs = preStm.executeQuery();
-//                result = new ArrayList<>();
-//                while (rs.next()) {
-//                    dto = new ProductDTO(rs.getInt("id"), rs.getInt("quantity"), rs.getString("name"), rs.getString("description"), rs.getString("image"), rs.getDouble("price"));
-//                    result.add(dto);
-//                }
-//            }
-//        } finally {
-//            closeConnection();
-//        }
-//        
-//        return result;
-//    }
+    public ArrayList<ProductDTO> getProductFromTo(int from, int to) throws SQLException, ClassNotFoundException
+    {
+        ArrayList<ProductDTO> result = null;
+        ProductDTO dto = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT id, name, description, price, quantity, image  FROM tblProduct WHERE id BETWEEN ? AND ?";
+                preStm = conn.prepareStatement(sql);
+                preStm.setInt(1, from);
+                preStm.setInt(2, to);
+                rs = preStm.executeQuery();
+                result = new ArrayList<>();
+                while(rs.next()) {
+                    dto = new ProductDTO();
+                    dto.setId(rs.getInt("id"));
+                    dto.setName(rs.getString("name"));
+                    dto.setDescription(rs.getString("description"));
+                    dto.setPrice(rs.getDouble("price"));
+                    dto.setQuantity(rs.getInt("quantity"));
+                    dto.setImage(rs.getString("image"));
+                    result.add(dto);
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        
+        return result;
+    }
     
     
     public boolean insertProduct(ProductDTO dto) throws SQLException, ClassNotFoundException {
@@ -167,4 +173,45 @@ public class ProductDAO implements Serializable {
         }
         return result;
     }
+      
+      public List<ProductDTO> findLikeByName(String search) throws SQLException, ClassNotFoundException
+      {
+          List<ProductDTO> result = null;
+          try {
+              conn = DBUtils.getConnection();
+              if (conn != null) {
+                  String sql = "SELECT id, name, description, price, quantity, image FROM tblProduct WHERE name LIKE ?";
+                  preStm = conn.prepareStatement(sql);
+                  preStm.setString(1, "%" + search + "%");
+                  rs = preStm.executeQuery();
+                  result = new ArrayList<>();
+                  while (rs.next()) {
+                        result.add(new ProductDTO(rs.getInt("id"),rs.getInt("quantity"), rs.getString("name"), rs.getString("description"), rs.getString("image"), rs.getDouble("price")));
+                  }
+              }
+          } finally {
+              closeConnection();
+          }
+          return result;
+      }
+      
+     public int countProduct() throws SQLException, ClassNotFoundException
+     {
+         int count = 0;
+          try {
+              conn = DBUtils.getConnection();
+              if (conn != null) {
+                  String sql = "SELECT COUNT(*) FROM tblProduct";
+                  preStm = conn.prepareStatement(sql);
+                  rs = preStm.executeQuery();
+                  if (rs.next()) {
+                      count = rs.getInt(1);
+                  }
+              }
+          } finally {
+              closeConnection();
+          }
+         
+         return count;
+     }
 }
