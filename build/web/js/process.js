@@ -341,7 +341,7 @@ function viewCheckout() {
         for (var index = 0; index < window.localStorage.length; index++) {
             var key = window.localStorage.key(index);
             var value = window.localStorage.getItem(key);
-            if (key != null && key.indexOf("count") === -1) {
+            if (key != null && key.indexOf("count") === -1 && key.indexOf('total') === -1) {
                 var Product = StringToXML(value);
                 totalPrice += parseInt(Product.getElementsByTagName("quantity")[0].textContent) * parseInt(Product.getElementsByTagName("price")[0].textContent);
                 createProductInCart(Product);
@@ -350,7 +350,7 @@ function viewCheckout() {
         var divButton = document.createElement("div");
         divButton.className = "col-lg-offset-7";
         divButton.style.marginTop = "2%";
-        divButton.innerHTML = "<h4 class='title' id='totalPriceOrder'>TOTAL: 0$</h4><div class='login_button text-center'><a href='#'>NEXT</a></div>";
+        divButton.innerHTML = "<h4 class='title' id='totalPriceOrder'>TOTAL: 0$</h4><div class='login_button text-center'><a href='#'>SUBMIT</a></div>";
         document.getElementById("checkout").appendChild(divButton);
         document.getElementById("totalPriceOrder").innerHTML = "TOTAL: " + totalPrice + "$";
     }
@@ -636,6 +636,17 @@ function postProduct() {
         }
     }
     xmlHttp.send(xmlDoc);
+
+
+    ////////////
+    var file = document.getElementById("image").files;
+    alert(file);
+    
+}
+
+function postImage() {
+    var xmlHttp = new XMLHttpRequest();
+    
 }
 
 function deleteProduct(id) {

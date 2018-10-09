@@ -44,7 +44,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				   </div>
                 </div> -->
                     <table class="table table-hover " id="table">
-                        
+
                         <thead class="thead-dark text-center">
                             <tr>
                                 <th scope="col">#</th>
@@ -68,7 +68,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             </tr> -->
                         </tbody>
                     </table>
-                    <div class="check_button text-center" style="float: left;" id="btnAdd"><a href="javascript:addProduct();">ADD NEW</a></div>
+                    <div class="check_button text-center" style="float: left;" id="btnAdd"><a href="javascript:addProduct();">ADD
+                            NEW</a></div>
                     <div id="infoProduct">
                         <div class="register-top-grid">
                             <h2>PRODUCT INFORMATION</h2>
@@ -92,21 +93,27 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 <span>QUANTITY</span>
                                 <input type="text" id="quantity">
                             </div>
+                            <div>
+                                <span>IMAGE</span>
+                                <input type="file" value="Upload File" id="image">
+                            </div>
                             <div class="clear"> </div>
                         </div>
                         <div class="clear"> </div>
                         <!-- <input type="button" class="login_button" value="submit"> -->
                         <div>
-                            <div class="check_button text-center" id="divUpdate" style="float: none"><a href="javascript:updateProduct();">Update Product</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div class="check_button text-center" id="divUpdate" style="float: none"><a href="javascript:updateProduct();">Update
+                                    Product</a>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <a href="javascript:cancelUpdate();">Cancel</a></div>
-                            <div class="check_button text-center" id="divAdd" style="float: none; display:none;"><a href="javascript:postProduct();">Add Product</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div class="check_button text-center" id="divAdd" style="float: none; display:none;"><a
+                                    href="javascript:postProduct();">Add Product</a>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <a href="javascript:cancelUpdate();">Cancel</a></div>
                         </div>
 
                     </div>
                 </div>
 
-            
+
             </div>
         </div>
     </div>
