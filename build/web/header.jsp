@@ -21,7 +21,7 @@
                         <ul class="nav" id="nav">
                             <li class="current"><a href="shop.jsp">Shop</a></li>
                             <li><a href="products.jsp">Product</a></li>
-                            <li><a href="#">Events</a></li>
+                            <li><a href="order.jsp">Order</a></li>
                             <li><a href="#">Experiance</a></li>
                             <li><a href="#">Company</a></li>
                             <%-- <li><a href="#">Contact</a></li> --%>

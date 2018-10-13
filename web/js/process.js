@@ -1,3 +1,5 @@
+var url = "http://localhost:8084/RestAPI/seminar/";
+
 function addToCart(idProduct) {
 
 
@@ -12,7 +14,7 @@ function addToCart(idProduct) {
     // xmlHttp.send();
     var Product;
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "product?id=" + idProduct, true);
+    xmlHttp.open("GET",url + "/product/" + idProduct, true);
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.status === 200 && xmlHttp.readyState === 4) {
             var xmlDoc = xmlHttp.responseXML;
@@ -160,7 +162,7 @@ function loadProduct() {
     // this.from = this.from + 4;
     // this.to = this.to + 4;
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "product?from=0" + "&to=" + this.to, true);
+    xmlHttp.open("GET", url + "product/0/" + this.to, true);
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             // alert(xmlHttp.responseXML);
@@ -181,7 +183,7 @@ function loadProduct() {
 function initTotal() {
     if (window.localStorage.getItem("total") == null) {
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", "product?count=count", true);
+        xmlHttp.open("GET", url + "product/count", true);
         xmlHttp.onreadystatechange = function () {
             if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                 window.localStorage.setItem("total", xmlHttp.responseText);
@@ -350,7 +352,7 @@ function viewCheckout() {
         var divButton = document.createElement("div");
         divButton.className = "col-lg-offset-7";
         divButton.style.marginTop = "2%";
-        divButton.innerHTML = "<h4 class='title' id='totalPriceOrder'>TOTAL: 0$</h4><div class='login_button text-center'><a href='#'>SUBMIT</a></div>";
+        divButton.innerHTML = "<h4 class='title' id='totalPriceOrder'>TOTAL: 0$</h4><div class='login_button text-center'><a href='javascript:checkoutCart();'>SUBMIT</a></div>";
         document.getElementById("checkout").appendChild(divButton);
         document.getElementById("totalPriceOrder").innerHTML = "TOTAL: " + totalPrice + "$";
     }
@@ -472,7 +474,7 @@ function validateLogin() {
 
 function loadProductInDB() {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "product", true);
+    xmlHttp.open("GET", url + "product", true);
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             // alert(xmlHttp.responseXML);
@@ -568,7 +570,7 @@ function updateProduct() {
     var quantity = document.getElementById("quantity");
     var xmlHttp = new XMLHttpRequest();
     // xmlHttp.open("PUT","http://localhost:8080/RestAPI/seminar/product/" + id.value, true);
-    xmlHttp.open("PUT", "product", true);
+    xmlHttp.open("PUT", url + "product", true);
 
     xmlHttp.setRequestHeader('Content-type', 'application/xml');
     // xmlHttp.setRequestHeader
@@ -604,6 +606,7 @@ function addProduct() {
     var quantity = document.getElementById("quantity");
     id.value = lastId + 1;
     name.value = "";
+    name.setAttribute("autocomplete","off");
     description.value = "";
     price.value = "";
     quantity.value = "";
@@ -631,8 +634,10 @@ function postProduct() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             loadProductInDB();
             document.getElementById("btnAdd").style.display = "";
-        } else {
-            console.log(xmlHttp);
+            swal({
+                icon : "success",
+                title: "Add successful"
+            });
         }
     }
     xmlHttp.send(xmlDoc);
@@ -640,13 +645,11 @@ function postProduct() {
 
     ////////////
     var file = document.getElementById("image").files;
-    alert(file);
-    
 }
 
 function postImage() {
     var xmlHttp = new XMLHttpRequest();
-    
+
 }
 
 function deleteProduct(id) {
@@ -678,7 +681,7 @@ function deleteProduct(id) {
 
 function sendSearchRequest(search) {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "product?search=" + search, true);
+    xmlHttp.open("GET", url + "product/name/" + search, true);
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.status === 200 && xmlHttp.readyState === 4) {
             if (xmlHttp.responseXML != null) {
@@ -691,22 +694,131 @@ function sendSearchRequest(search) {
 
 window.onscroll = function () {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        this.to = this.to + 4;
         // this.from = this.from + 4;
-
         var total = parseInt(window.localStorage.getItem("total"));
-        console.log("total " + total + " to " + to);
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", "product?from=0" + "&to=" + this.to, true);
-        xmlHttp.onreadystatechange = function () {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                // alert(xmlHttp.responseXML);
-                // xmlDoc = new XMLSerializer().serializeToString(xmlHttp.responseXML.documentElement);
-                showProduct(xmlHttp.responseXML);
-                // productXML = xmlHttp.responseXML;
-                // alert(xmlHttp.responseText);
-            }
-        };
-        xmlHttp.send();
+        if (to < total) {
+            this.to = this.to + 4;
+            console.log("total " + total + " to " + to);
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", url + "/product/0/" + this.to, true);
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                    // alert(xmlHttp.responseXML);
+                    // xmlDoc = new XMLSerializer().serializeToString(xmlHttp.responseXML.documentElement);
+                    showProduct(xmlHttp.responseXML);
+                    // productXML = xmlHttp.responseXML;
+                    // alert(xmlHttp.responseText);
+                }
+            };
+            xmlHttp.send();
+        }
+
     }
 };
+
+function checkoutCart() {
+    var xmlDoc = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>";
+    xmlDoc += "<orderDB>";
+    xmlDoc += "<createdTime>" + new Date().toLocaleTimeString() + ' ' + new Date().toLocaleDateString() + "</createdTime>";
+    xmlDoc += "<total>" + document.getElementById("totalPriceOrder").innerHTML.split(":")[1].split("$")[0] + "</total>";
+    xmlDoc += "<username>" + "Guest" + "</username>";
+    xmlDoc += "</orderDB>";
+    swal({
+            title: "Are you sure?",
+            text: "Checkout cart!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((checkout) => {
+            if (checkout) {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("POST", url + "orderdb", true);
+                xmlHttp.setRequestHeader('Content-type', 'application/xml');
+                xmlHttp.send(xmlDoc);
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 204) {
+                        swal("Checkout successfull!", {
+                            icon: "success",
+                        });
+                        for (var index = 0; index < window.localStorage.length; index++) {
+                            var key = window.localStorage.key(index);
+                            var value = window.localStorage.getItem(key);
+                            if (key != null && key.indexOf("count") === -1 && key.indexOf('total') === -1) {
+                                var Product = StringToXML(value);
+                                
+                            }
+                        }   
+                        window.localStorage.clear();
+                        viewCart();
+                        viewCheckout();
+                    } else {
+                        swal({
+                            title : "Checkout error!!",
+                            icon : "error"
+                        });
+                    }
+                }
+            } else {
+                swal({
+                    title : "Checkout not completed!!",
+                    icon : "error"
+                });
+            }
+        });
+}
+
+function loadOrder() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", url + "orderdb",true);
+    xmlHttp.setRequestHeader("Content-Type","application/xml");
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        //   console.log(xmlHttp.responseText);  
+          showOrder(xmlHttp.responseXML);
+        } 
+    }
+    xmlHttp.send();
+}
+function showOrder(xmlDoc) {
+    var Orders = xmlDoc.childNodes[0];
+    for (var i = 0; i < Orders.children.length; i++) {
+        var Order = Orders.children[i];
+        console.log(XMLToString(Order));
+        document.getElementById("dataOrder").appendChild(createRowOrder(Order));
+    }
+}
+function createRowOrder(Order) {
+    var tr = document.createElement("tr");
+    
+    var id = document.createElement("td");
+    id.innerHTML = Order.getElementsByTagName("id")[0].textContent.toString();
+    var username = document.createElement("td");
+    username.innerHTML = Order.getElementsByTagName("username")[0].textContent.toString();
+
+
+    var createdTime = document.createElement("td");
+    createdTime.innerHTML = Order.getElementsByTagName("createdTime")[0].textContent.toString();
+    var total = document.createElement("td");
+    total.innerHTML = Order.getElementsByTagName("total")[0].textContent.toString();
+    
+    var viewDetail = document.createElement("td");
+    viewDetail.innerHTML = "<a href='javascript:viewDetail(" + id.innerHTML + ");' class='btn btn-light' >+</a>";
+
+    // var detail = document.createElement("div");
+    // detail.className = "collapse";
+    // detail.id = "id" + id.innerHTML;
+    // detail.innerHTML = "<div class='card card-body'>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.</div>";
+
+    tr.appendChild(id);
+    tr.appendChild(createdTime);
+    tr.appendChild(username);
+    tr.appendChild(total);
+    tr.appendChild(viewDetail);
+    // document.getElementById("dataOrder").appendChild(createDetail(id.innerHTML));
+    return tr;
+}
+
+function viewDetail(idOrder) {
+    
+}
