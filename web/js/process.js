@@ -1,4 +1,5 @@
 var url = "http://localhost:8084/RestAPI/seminar/";
+// link of API
 
 function addToCart(idProduct) {
 
@@ -540,7 +541,7 @@ function showPopup(idProduct) {
     var price = document.getElementById("price");
     var quantity = document.getElementById("quantity");
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "product?id=" + idProduct, true);
+    xmlHttp.open("GET", url + "product/" + idProduct, true);
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.status === 200 && xmlHttp.readyState === 4) {
             var xmlDoc = xmlHttp.responseXML;
@@ -620,7 +621,7 @@ function postProduct() {
     var quantity = document.getElementById("quantity");
     var xmlHttp = new XMLHttpRequest();
     // xmlHttp.open("PUT","http://localhost:8080/RestAPI/seminar/product/" + id.value, true);
-    xmlHttp.open("POST", "product", true);
+    xmlHttp.open("POST", url + "product", true);
     xmlHttp.setRequestHeader('Content-type', 'application/xml');
     xmlDoc = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>";
     xmlDoc += "<Product>";
@@ -663,7 +664,7 @@ function deleteProduct(id) {
         .then((willDelete) => {
             if (willDelete) {
                 var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("DELETE", "product?id=" + id, true);
+                xmlHttp.open("DELETE", "product/id" + id, true);
                 xmlHttp.onreadystatechange = function () {
                     if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                         swal("Product have been deleted!", {
